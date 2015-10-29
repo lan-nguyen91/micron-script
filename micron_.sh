@@ -1,7 +1,7 @@
 #!bin/bash
 
-mkdir $1
-cd $1
+mkdir ~/$1
+cd ~/$1
 git init
 
 #clone hof repos
@@ -26,6 +26,9 @@ then
   PORTSTRING="    \"start\":\"PORT=${2} NODE_ENV=dev nodemon server\""
   sed -i "8s/.*/${PORTSTRING}/" ./package.json
 fi
+
+#rm tmp folder
+rm -rf tmp
 
 # add files
 git add .
