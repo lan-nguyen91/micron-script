@@ -1,7 +1,12 @@
 #!bin/bash
 
-mkdir ~/$1
-cd ~/$1
+filename=$(basename $1)
+extension=${filename##*.}
+filename=${filename%.*}
+
+
+mkdir ~/$filename
+cd ~/$filename
 git init
 
 #clone hof repos
@@ -10,8 +15,8 @@ rm -rf tmp/.git
 
 # update README
 rm tmp/README.md
-echo "# $1" >> tmp/README.md
-REPOSSTRING="  \"name\":\""$1"\","
+echo "# $filename" >> tmp/README.md
+REPOSSTRING="  \"name\":\""$filename"\","
 
 #update package.json
 sed -i "2s/.*/${REPOSSTRING}/" tmp/package.json
@@ -31,8 +36,14 @@ fi
 rm -rf tmp
 
 # add files
+git remote add origin $1
 git add .
-git status
+git commit -m "Initial Commit"
+git checkout -b development
+git push origin development
 
-#make initial commit
-echo -e "\e[1;31mYou can now commit and push this initial structure!\e[0m"
+#install dependencies
+npm install
+
+#DONE
+echo -e "\e[1;31mYou are ready to develop now! Please go to /${filename} folder\e[0m"
